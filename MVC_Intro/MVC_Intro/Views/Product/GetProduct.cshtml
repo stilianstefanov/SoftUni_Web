@@ -1,0 +1,18 @@
+﻿@model MVC_Intro.ViewModels.Product.ProductViewModel
+
+@{
+    ViewData["Title"] = "Product";
+}
+
+<div class="container">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.Price</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <a href="/Product/All" class="btn btn-primary">Back</a>
+</div>

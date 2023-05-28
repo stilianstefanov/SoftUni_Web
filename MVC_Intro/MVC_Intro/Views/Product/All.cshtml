@@ -1,0 +1,39 @@
+﻿@model ICollection<MVC_Intro.ViewModels.Product.ProductViewModel>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<div class="container">
+<h2>Get Product By Keyword</h2>
+<form asp-controller="Product" asp-action="All" method="post">
+    <div class="form-group">
+        <label for="keywordInput">Enter keyword:</label>
+        <input type="text" class="form-control" id="keywordInput" placeholder="Enter name" name="keyword">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+
+<div class="container">
+    <h2>All Products</h2>
+    <ul class="list-group">
+        @foreach(var product in Model)
+        {
+            <li class="list-group-item"><a href="/Product/GetProduct/@product.Id">@product.Name - @product.Price$</a></li>
+        }
+    </ul>
+</div>
+
+<div class="container">
+    <h2>Add New Product</h2>
+    <form asp-controller="Product" asp-action="Add" method="post">
+        <div class="form-group">
+            <label for="nameInput">Name:</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="Enter name" name="Name">
+            <label for="priceInput">Price:</label>
+            <input type="text" class="form-control" id="priceInput" placeholder="Enter price" name="Price">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

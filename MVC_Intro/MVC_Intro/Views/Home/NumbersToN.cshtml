@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Numbers 1 ... N";
+}
+
+<h2>@ViewBag.Title</h2>
+<ul>
+    @for (int i = 1; i < @ViewBag.Number; i++)
+    {
+        <li>@i</li>
+    }
+</ul>
+
+<div class="container">
+    <h2>Submit a Number</h2>
+    <form>
+        <div class="form-group">
+            <label for="numberInput">Number:</label>
+            <input type="number" class="form-control" id="numberInput" placeholder="Enter a number" name="number">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
