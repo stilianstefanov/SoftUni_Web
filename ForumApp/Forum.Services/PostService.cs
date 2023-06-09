@@ -1,12 +1,11 @@
-﻿using Forum.Data.Models;
-
-namespace Forum.Services
+﻿namespace Forum.Services
 {
     using Microsoft.EntityFrameworkCore;
 
     using Data;
     using ViewModels;
     using Contracts;
+    using Forum.Data.Models;
 
     public class PostService : IPostService
     {
