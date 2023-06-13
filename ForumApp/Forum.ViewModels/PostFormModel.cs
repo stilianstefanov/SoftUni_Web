@@ -1,17 +1,17 @@
-﻿namespace Forum.ViewModels
+﻿namespace Forum.ViewModels;
+
+using System.ComponentModel.DataAnnotations;
+using static Common.Validations.EntityValidations.Post;
+
+public class PostFormModel
 {
-    using System.ComponentModel.DataAnnotations;
-    using static Common.Validations.EntityValidations.Post;
+    [Required]
+    [StringLength(TitleMaxLength)]
+    [MinLength(TitleMinLength)]
+    public string Title { get; set; } = null!;
 
-    public class PostFormModel
-    {
-
-        [Required]
-        [StringLength(TitleMaxLength), MinLength(TitleMinLength)]
-        public string Title { get; set; } = null!;
-
-        [Required]
-        [StringLength(ContentMaxLength), MinLength(ContentMinLength)]
-        public string Content { get; set; } = null!;
-    }
+    [Required]
+    [StringLength(ContentMaxLength)]
+    [MinLength(ContentMinLength)]
+    public string Content { get; set; } = null!;
 }

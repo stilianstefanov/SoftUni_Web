@@ -1,17 +1,16 @@
-﻿namespace Forum.Services.Contracts
+﻿namespace Forum.Services.Contracts;
+
+using ViewModels;
+
+public interface IPostService
 {
-    using ViewModels;
+    Task<IEnumerable<PostViewModel>> ListAllAsync();
 
-    public interface IPostService
-    { 
-        Task<IEnumerable<PostViewModel>> ListAllAsync();
+    Task AddPostAsync(PostFormModel postFormModel);
 
-        Task AddPostAsync(PostFormModel postFormModel);
+    Task<PostFormModel> GetProductForEditOrDelete(string productId);
 
-        Task<PostFormModel> GetProductForEditOrDelete(string productId);
+    Task EditPostByIdAsync(string id, PostFormModel postFormModel);
 
-        Task EditPostByIdAsync(string id, PostFormModel postFormModel);
-
-        Task DeletePostByIdAsync(string id);
-    }
+    Task DeletePostByIdAsync(string id);
 }
