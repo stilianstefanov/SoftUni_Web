@@ -1,9 +1,8 @@
-﻿namespace SimpleChat.ViewModels
-{
-    public class ChatViewModel
-    {
-        public MessageViewModel CurrentMessage { get; set; } = null!;
+﻿namespace SimpleChat.ViewModels;
 
-        public List<MessageViewModel> Messages { get; set; } = null!;
-    }
+public class ChatViewModel
+{
+    public MessageViewModel CurrentMessage { get; set; } = null!;
+
+    public List<MessageViewModel> Messages { get; set; } = null!;
 }

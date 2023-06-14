@@ -1,57 +1,49 @@
-﻿namespace SimpleChat.Controllers
+﻿namespace SimpleChat.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using ViewModels;
+
+public class ChatController : Controller
 {
-    using Microsoft.AspNetCore.Mvc;
-    using System.Diagnostics;
+    private static IList<KeyValuePair<string, string>> _messages = new List<KeyValuePair<string, string>>();
 
-    using SimpleChat.ViewModels;
-
-    public class ChatController : Controller
+    public ChatController()
     {
-        private readonly ILogger<ChatController> _logger;
+    }
 
-        private static IList<KeyValuePair<string, string>> _messages = new List<KeyValuePair<string, string>>();
+    [HttpGet]
+    public IActionResult Show()
+    {
+        if (!_messages.Any()) return View(new ChatViewModel());
 
-        public ChatController(ILogger<ChatController> logger)
+        var chatModel = new ChatViewModel()
         {
-            _logger = logger;
-        }
+            Messages = _messages
+                .Select(m => new MessageViewModel()
+                {
+                    Sender = m.Key,
+                    MessageText = m.Value
+                })
+                .ToList()
+        };
 
-        [HttpGet]
-        public IActionResult Show()
-        {
-            if (!_messages.Any())
-            {
-                return View(new ChatViewModel());
-            }
+        return View(chatModel);
+    }
 
-            var chatModel = new ChatViewModel()
-            {
-                Messages = _messages
-                    .Select(m => new MessageViewModel()
-                    {
-                        Sender = m.Key,
-                        MessageText = m.Value
-                    })
-                    .ToList()
-            };
+    [HttpPost]
+    public IActionResult Send(ChatViewModel chat)
+    {
+        var newMessage = chat.CurrentMessage;
 
-            return View(chatModel);
-        }
+        _messages.Add(new KeyValuePair<string, string>(newMessage.Sender, newMessage.MessageText));
 
-        [HttpPost]
-        public IActionResult Send(ChatViewModel chat)
-        {
-            var newMessage = chat.CurrentMessage;
+        return RedirectToAction("Show");
+    }
 
-            _messages.Add(new KeyValuePair<string, string>(newMessage.Sender, newMessage.MessageText));
-
-            return RedirectToAction("Show");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
