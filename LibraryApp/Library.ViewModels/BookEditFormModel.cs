@@ -1,31 +1,33 @@
-﻿namespace Library.ViewModels
+﻿namespace Library.ViewModels;
+
+using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstants.BookEntityValidations;
+
+public class BookEditFormModel
 {
-    using System.ComponentModel.DataAnnotations;
-    using static Library.Common.ValidationConstants.BookEntityValidations;
+    [Required]
+    [StringLength(BookTitleMaxLength, MinimumLength = BookTitleMinLength,
+        ErrorMessage = "Book Title must be between 10 and 50 symbols")]
+    public string Title { get; set; } = null!;
 
-    public class BookEditFormModel
-    {
-        [Required]
-        [StringLength(BookTitleMaxLength, MinimumLength = BookTitleMinLength, ErrorMessage = "Book Title must be between 10 and 50 symbols")]
-        public string Title { get; set; } = null!;
+    [Required]
+    [StringLength(BookAuthorMaxLength, MinimumLength = BookAuthorMinLength,
+        ErrorMessage = "Book Author must be between 5 and 50 symbols")]
+    public string Author { get; set; } = null!;
 
-        [Required]
-        [StringLength(BookAuthorMaxLength, MinimumLength = BookAuthorMinLength, ErrorMessage = "Book Author must be between 5 and 50 symbols")]
-        public string Author { get; set; } = null!;
+    [Required]
+    [StringLength(BookDescriptionMaxLength, MinimumLength = BookDescriptionMinLength,
+        ErrorMessage = "Book Description must be between 5 and 5000 symbols")]
+    public string Description { get; set; } = null!;
 
-        [Required]
-        [StringLength(BookDescriptionMaxLength, MinimumLength = BookDescriptionMinLength, ErrorMessage = "Book Description must be between 5 and 5000 symbols")]
-        public string Description { get; set; } = null!;
+    [Required]
+    public string ImageUrl { get; set; } = null!;
 
-        [Required]
-        public string ImageUrl { get; set; } = null!;
+    [Required]
+    [Range(typeof(decimal), BookRatingMinValue, BookRatingMaxValue)]
+    public string Rating { get; set; } = null!;
 
-        [Required]
-        [Range(typeof(decimal), BookRatingMinValue, BookRatingMaxValue)]
-        public string Rating { get; set; } = null!;
+    public int CategoryId { get; set; }
 
-        public int CategoryId { get; set; }
-
-        public IEnumerable<CategorySelectViewModel>? Categories { get; set; }
-    }
+    public IEnumerable<CategorySelectViewModel>? Categories { get; set; }
 }

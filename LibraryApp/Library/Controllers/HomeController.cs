@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿namespace Library.Controllers;
 
-namespace Library.Controllers
+using Microsoft.AspNetCore.Mvc;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("All", "Book");
-            }
+        if (User.Identity != null && User.Identity.IsAuthenticated) return RedirectToAction("All", "Book");
 
-            return View();
-        }
+        return View();
     }
 }

@@ -1,112 +1,108 @@
-﻿namespace Library.Controllers
+﻿namespace Library.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Services.Contracts;
+using ViewModels;
+
+[Authorize]
+public class BookController : Controller
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-    using System.Collections;
-    using System.Security.Claims;
+    private readonly IBookService _bookService;
 
-    using Library.Services.Contracts;
-    using Library.ViewModels;
-
-
-    [Authorize]
-    public class BookController : Controller
+    public BookController(IBookService bookService)
     {
-        private readonly IBookService _bookService;
+        _bookService = bookService;
+    }
 
-        public BookController(IBookService bookService)
+    public async Task<IActionResult> All()
+    {
+        var viewModels = await _bookService.GetAllAsync();
+
+        return View(viewModels);
+    }
+
+    public async Task<IActionResult> Mine()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var viewModels = await _bookService.GetMineBooksAsync(userId);
+
+        return View(viewModels);
+    }
+
+    public async Task<IActionResult> Add()
+    {
+        var inputModel = await _bookService.GenerateFormModelAsync();
+
+        return View(inputModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Add(BookAddFormModel inputModel)
+    {
+        if (!ModelState.IsValid)
         {
-            _bookService = bookService;
+            inputModel = await _bookService.GenerateFormModelAsync();
+            return View(inputModel);
         }
 
-        public async Task<IActionResult> All()
-        {
-            IEnumerable<BookAllViewModel> viewModels = await _bookService.GetAllAsync();
+        decimal rating;
+        var isValid = decimal.TryParse(inputModel.Rating, out rating);
 
-            return View(viewModels);
+        if (!isValid || rating < 0 || rating > 10)
+        {
+            ModelState.AddModelError(nameof(inputModel.Rating), "Rating must be between 0.00 and 10.00");
+
+            inputModel = await _bookService.GenerateFormModelAsync();
+            return View(inputModel);
         }
 
-        public async Task<IActionResult> Mine()
+        await _bookService.AddBookAsync(inputModel, rating);
+
+        return RedirectToAction("All", "Book");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddToCollection(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        await _bookService.AddBookToCollectionAsync(id, userId);
+
+        return RedirectToAction("All", "Book");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RemoveFromCollection(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        await _bookService.RemoveBookFromCollectionAsync(id, userId);
+
+        return RedirectToAction("Mine", "Book");
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var inputModel = await _bookService.GenerateEditFormModelAsync(id);
+
+        return View(inputModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, BookEditFormModel inputEditFormModel)
+    {
+        if (!ModelState.IsValid)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            IEnumerable<BookMyViewModel> viewModels = await _bookService.GetMineBooksAsync(userId);
-
-            return View(viewModels);
-        }
-
-        public async Task<IActionResult> Add()
-        {
-            BookAddFormModel inputModel = await _bookService.GenerateFormModelAsync();
+            var inputModel = await _bookService.GenerateEditFormModelAsync(id);
 
             return View(inputModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(BookAddFormModel inputModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                inputModel = await _bookService.GenerateFormModelAsync();
-                return View(inputModel);
-            }
+        await _bookService.EditAsync(id, inputEditFormModel);
 
-            decimal rating;
-            bool isValid = decimal.TryParse(inputModel.Rating, out rating);
-
-            if (!isValid || rating < 0 || rating > 10)
-            {
-                ModelState.AddModelError(nameof(inputModel.Rating), "Rating must be between 0.00 and 10.00");
-
-                inputModel = await _bookService.GenerateFormModelAsync();
-                return View(inputModel);
-            }
-
-            await _bookService.AddBookAsync(inputModel, rating);
-
-            return RedirectToAction("All", "Book");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddToCollection(int id)
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            await _bookService.AddBookToCollectionAsync(id, userId );
-
-            return RedirectToAction("All", "Book");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoveFromCollection(int id)
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            await _bookService.RemoveBookFromCollectionAsync(id, userId );
-
-            return RedirectToAction("Mine", "Book");
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            BookEditFormModel inputModel = await _bookService.GenerateEditFormModelAsync(id);
-
-            return View(inputModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(int id, BookEditFormModel inputEditFormModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                BookEditFormModel inputModel = await _bookService.GenerateEditFormModelAsync(id);
-
-                return View(inputModel);
-            }
-
-            await _bookService.EditAsync(id, inputEditFormModel);
-
-            return RedirectToAction("All", "Book");
-        }
+        return RedirectToAction("All", "Book");
     }
 }

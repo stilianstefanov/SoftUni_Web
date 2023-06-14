@@ -1,18 +1,16 @@
-﻿namespace Library.Data.Models
+﻿namespace Library.Data.Models;
+
+using System.ComponentModel.DataAnnotations;
+using static Common.ValidationConstants.CategoryValidations;
+
+public class Category
 {
-    using System.ComponentModel.DataAnnotations;
+    [Key]
+    public int Id { get; set; }
 
-    using static Library.Common.ValidationConstants.CategoryValidations;
+    [Required]
+    [MaxLength(CategoryNameMaxLength)]
+    public string Name { get; set; } = null!;
 
-    public class Category
-    {
-        [Key]
-        public int Id { get; set; }
-
-        [Required]
-        [MaxLength(CategoryNameMaxLength)]
-        public string Name { get; set; } = null!;
-
-        public virtual ICollection<Book> Books { get; set; } = null!;
-    }
+    public virtual ICollection<Book> Books { get; set; } = null!;
 }

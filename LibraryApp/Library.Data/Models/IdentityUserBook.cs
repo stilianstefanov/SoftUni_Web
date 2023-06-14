@@ -1,18 +1,17 @@
-﻿namespace Library.Data.Models
+﻿namespace Library.Data.Models;
+
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
+public class IdentityUserBook
 {
-    using System.ComponentModel.DataAnnotations.Schema;
-    using Microsoft.AspNetCore.Identity;
+    [ForeignKey(nameof(Collector))]
+    public string CollectorId { get; set; } = null!;
 
-    public class IdentityUserBook
-    {
-        [ForeignKey(nameof(Collector))]
-        public string CollectorId { get; set; } = null!;
+    public IdentityUser Collector { get; set; } = null!;
 
-        public IdentityUser Collector { get; set; } = null!;
+    [ForeignKey(nameof(Book))]
+    public int BookId { get; set; }
 
-        [ForeignKey(nameof(Book))]
-        public int BookId { get; set; }
-
-        public Book Book { get; set; } = null!;
-    }
+    public Book Book { get; set; } = null!;
 }

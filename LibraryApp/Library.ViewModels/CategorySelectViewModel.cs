@@ -1,9 +1,8 @@
-﻿namespace Library.ViewModels
-{
-    public class CategorySelectViewModel
-    {
-        public int Id { get; set; }
+﻿namespace Library.ViewModels;
 
-        public string Name { get; set; } = null!;
-    }
+public class CategorySelectViewModel
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = null!;
 }
