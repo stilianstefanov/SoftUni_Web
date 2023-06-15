@@ -1,19 +1,18 @@
-﻿namespace TaskBoardApp.Services.Contracts
+﻿namespace TaskBoardApp.Services.Contracts;
+
+using TaskBoardApp.Web.ViewModels.Task;
+
+public interface ITaskService
 {
-    using TaskBoardApp.Web.ViewModels.Task;
+    Task CreateAsync(TaskFormModel model, string userId);
 
-    public interface ITaskService
-    {
-        Task CreateAsync(TaskFormModel model, string userId);
+    Task<TaskDetailsViewModel> GetTaskDetailsAsync(string id);
 
-        Task<TaskDetailsViewModel> GetTaskDetailsAsync(string id);
+    Task<TaskFormModel> GetTaskForEditAsync(string id);
 
-        Task<TaskFormModel> GetTaskForEditAsync(string id);
+    Task<TaskViewModel> GetTaskForDeleteAsync(string id);
 
-        Task<TaskViewModel> GetTaskForDeleteAsync(string id);
+    Task EditAsync(string id, TaskFormModel model);
 
-        Task EditAsync(string id, TaskFormModel model);
-
-        Task DeleteAsync(string id);
-    }
+    Task DeleteAsync(string id);
 }

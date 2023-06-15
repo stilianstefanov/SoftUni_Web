@@ -1,13 +1,12 @@
-﻿namespace TaskBoardApp.Services.Contracts
+﻿namespace TaskBoardApp.Services.Contracts;
+
+using Web.ViewModels.Board;
+
+public interface IBoardService
 {
-    using Web.ViewModels.Board;
+    Task<ICollection<BoardAllViewModel>> GetAllAsync();
 
-    public interface IBoardService
-    {
-        Task<ICollection<BoardAllViewModel>> GetAllAsync();
+    Task<IEnumerable<BoardSelectViewModel>> GetAllBoardsForSelectAsync();
 
-        Task<IEnumerable<BoardSelectViewModel>> GetAllBoardsForSelectAsync();
-
-        Task<bool> BoardExistByIdAsync(int id);
-    }
+    Task<bool> BoardExistByIdAsync(int id);
 }

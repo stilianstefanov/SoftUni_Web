@@ -1,9 +1,8 @@
-﻿namespace TaskBoardApp.Web.ViewModels.Board
-{
-    public class BoardSelectViewModel
-    {
-        public int Id { get; set; }
+﻿namespace TaskBoardApp.Web.ViewModels.Board;
 
-        public string Name { get; set; } = null!;
-    }
+public class BoardSelectViewModel
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = null!;
 }

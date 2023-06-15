@@ -1,108 +1,106 @@
-﻿namespace TaskBoardApp.Services
+﻿namespace TaskBoardApp.Services;
+
+using Microsoft.EntityFrameworkCore;
+using Contracts;
+using TaskBoardApp.Web.ViewModels.Task;
+using Data;
+
+public class TaskService : ITaskService
 {
-    using Microsoft.EntityFrameworkCore;
+    private readonly TaskBoardDbContext _dbContext;
 
-    using Contracts;
-    using TaskBoardApp.Web.ViewModels.Task;
-    using TaskBoardApp.Data;
-
-    public class TaskService : ITaskService
+    public TaskService(TaskBoardDbContext dbContext)
     {
-        private readonly TaskBoardDbContext _dbContext;
+        _dbContext = dbContext;
+    }
 
-        public TaskService(TaskBoardDbContext dbContext)
+    public async Task CreateAsync(TaskFormModel model, string userId)
+    {
+        var task = new Data.Models.Task()
         {
-            _dbContext = dbContext;
-        }
+            Description = model.Description,
+            Title = model.Title,
+            BoardId = model.BoardId,
+            CreatedOn = DateTime.UtcNow,
+            OwnerId = userId
+        };
 
-        public async Task CreateAsync(TaskFormModel model, string userId)
-        {
-            Data.Models.Task task = new Data.Models.Task()
+        await _dbContext.Tasks.AddAsync(task);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<TaskDetailsViewModel> GetTaskDetailsAsync(string id)
+    {
+        var viewModel = await _dbContext
+            .Tasks
+            .Select(t => new TaskDetailsViewModel()
             {
-                Description = model.Description,
-                Title = model.Title,
-                BoardId = model.BoardId,
-                CreatedOn = DateTime.UtcNow,
-                OwnerId = userId
-            };
+                Board = t.Board.Name,
+                CreatedOn = t.CreatedOn.ToString("f"),
+                Description = t.Description,
+                Id = t.Id.ToString(),
+                Owner = t.Owner.UserName,
+                Title = t.Title
+            })
+            .FirstAsync(t => t.Id == id);
 
-            await _dbContext.Tasks.AddAsync(task);
-            await _dbContext.SaveChangesAsync();
-        }
 
-        public async Task<TaskDetailsViewModel> GetTaskDetailsAsync(string id)
+        return viewModel;
+    }
+
+    public async Task<TaskFormModel> GetTaskForEditAsync(string id)
+    {
+        var taskModel = await _dbContext
+            .Tasks
+            .FirstAsync(t => t.Id.ToString() == id);
+
+        var viewModel = new TaskFormModel()
         {
-            TaskDetailsViewModel viewModel = await _dbContext
-                .Tasks
-                .Select(t => new TaskDetailsViewModel()
-                {
-                    Board = t.Board.Name,
-                    CreatedOn = t.CreatedOn.ToString("f"),
-                    Description = t.Description,
-                    Id = t.Id.ToString(),
-                    Owner = t.Owner.UserName,
-                    Title = t.Title
-                })
-                .FirstAsync(t => t.Id == id);
-          
+            Title = taskModel.Title,
+            Description = taskModel.Description,
+            BoardId = taskModel.BoardId
+        };
 
-            return viewModel;
-        }
+        return viewModel;
+    }
 
-        public async Task<TaskFormModel> GetTaskForEditAsync(string id)
+    public async Task<TaskViewModel> GetTaskForDeleteAsync(string id)
+    {
+        var taskModel = await _dbContext
+            .Tasks
+            .FirstAsync(t => t.Id.ToString() == id);
+
+        var viewModel = new TaskViewModel()
         {
-            var taskModel = await _dbContext
-                .Tasks
-                .FirstAsync(t => t.Id.ToString() == id);
+            Id = taskModel.Id.ToString(),
+            Title = taskModel.Title,
+            Description = taskModel.Description
+        };
 
-            TaskFormModel viewModel = new TaskFormModel()
-            {
-                Title = taskModel.Title,
-                Description = taskModel.Description,
-                BoardId = taskModel.BoardId
-            };
+        return viewModel;
+    }
 
-            return viewModel;
-        }
+    public async Task EditAsync(string id, TaskFormModel model)
+    {
+        var taskModel = await _dbContext
+            .Tasks
+            .FirstAsync(t => t.Id.ToString() == id);
 
-        public async Task<TaskViewModel> GetTaskForDeleteAsync(string id)
-        {
-            var taskModel = await _dbContext
-                .Tasks
-                .FirstAsync(t => t.Id.ToString() == id);
+        taskModel.Title = model.Title;
+        taskModel.Description = model.Description;
+        taskModel.BoardId = model.BoardId;
 
-            TaskViewModel viewModel = new TaskViewModel()
-            {
-                Id = taskModel.Id.ToString(),
-                Title = taskModel.Title,
-                Description = taskModel.Description
-            };
+        await _dbContext.SaveChangesAsync();
+    }
 
-            return viewModel;
-        }
+    public async Task DeleteAsync(string id)
+    {
+        var taskModel = await _dbContext
+            .Tasks
+            .FirstAsync(t => t.Id.ToString() == id);
 
-        public async Task EditAsync(string id, TaskFormModel model)
-        {
-            var taskModel = await _dbContext
-                .Tasks
-                .FirstAsync(t => t.Id.ToString() == id);
+        _dbContext.Tasks.Remove(taskModel);
 
-            taskModel.Title = model.Title;
-            taskModel.Description = model.Description;
-            taskModel.BoardId = model.BoardId;
-
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var taskModel = await _dbContext
-                .Tasks
-                .FirstAsync(t => t.Id.ToString() == id);
-
-            _dbContext.Tasks.Remove(taskModel);
-
-            await _dbContext.SaveChangesAsync();
-        }
+        await _dbContext.SaveChangesAsync();
     }
 }

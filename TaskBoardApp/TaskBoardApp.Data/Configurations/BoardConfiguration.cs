@@ -1,49 +1,46 @@
-﻿namespace TaskBoardApp.Data.Configurations
+﻿namespace TaskBoardApp.Data.Configurations;
+
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using Models;
+
+internal class BoardConfiguration : IEntityTypeConfiguration<Board>
 {
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using Microsoft.EntityFrameworkCore;
-
-    using Models;
-
-
-    internal class BoardConfiguration : IEntityTypeConfiguration<Board>
+    public void Configure(EntityTypeBuilder<Board> builder)
     {
-        public void Configure(EntityTypeBuilder<Board> builder)
+        builder.HasData(GenerateBoards());
+    }
+
+    private Board[] GenerateBoards()
+    {
+        ICollection<Board> boards = new HashSet<Board>();
+
+        Board board;
+
+        board = new Board()
         {
-            builder.HasData(GenerateBoards());
-        }
+            Id = 1,
+            Name = "Open"
+        };
 
-        private Board[] GenerateBoards()
+        boards.Add(board);
+
+        board = new Board()
         {
-            ICollection<Board> boards = new HashSet<Board>();
+            Id = 2,
+            Name = "In Progress"
+        };
 
-            Board board;
+        boards.Add(board);
 
-            board = new Board()
-            {
-                Id = 1,
-                Name = "Open"
-            };
+        board = new Board()
+        {
+            Id = 3,
+            Name = "Done"
+        };
 
-            boards.Add(board);
+        boards.Add(board);
 
-            board = new Board()
-            {
-                Id = 2,
-                Name = "In Progress"
-            };
-
-            boards.Add(board);
-
-            board = new Board()
-            {
-                Id = 3,
-                Name = "Done"
-            };
-
-            boards.Add(board);
-
-            return boards.ToArray();
-        }
+        return boards.ToArray();
     }
 }

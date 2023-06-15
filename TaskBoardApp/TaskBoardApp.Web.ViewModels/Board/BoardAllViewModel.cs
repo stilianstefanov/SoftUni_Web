@@ -1,11 +1,10 @@
-﻿namespace TaskBoardApp.Web.ViewModels.Board
+﻿namespace TaskBoardApp.Web.ViewModels.Board;
+
+using Task;
+
+public class BoardAllViewModel
 {
-    using Task;
+    public string Name { get; set; } = null!;
 
-    public class BoardAllViewModel
-    {
-        public string Name { get; set; } = null!;
-
-        public ICollection<TaskViewModel> Tasks { get; set; } = null!;
-    }
+    public ICollection<TaskViewModel> Tasks { get; set; } = null!;
 }

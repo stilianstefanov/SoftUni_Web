@@ -1,25 +1,23 @@
-﻿namespace TaskBoardApp.Web.Controllers
+﻿namespace TaskBoardApp.Web.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Services.Contracts;
+
+[Authorize]
+public class BoardController : Controller
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
+    private readonly IBoardService _boardService;
 
-    using Services.Contracts;
-
-    [Authorize]
-    public class BoardController : Controller
+    public BoardController(IBoardService boardService)
     {
-        private readonly IBoardService _boardService;
+        _boardService = boardService;
+    }
 
-        public BoardController(IBoardService boardService)
-        {
-            _boardService = boardService;
-        }
+    public async Task<IActionResult> All()
+    {
+        var allBoards = await _boardService.GetAllAsync();
 
-        public async Task<IActionResult> All()
-        {
-            var allBoards = await _boardService.GetAllAsync();
-
-            return View(allBoards);
-        }
+        return View(allBoards);
     }
 }
