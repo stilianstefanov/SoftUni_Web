@@ -1,0 +1,14 @@
+﻿@model IEnumerable<BusStationApp.ViewModels.DestinationAllViewModel>
+
+<section class="added-travels">
+    @foreach (var destination in Model)
+    {
+        <div class="added-travel">
+            <img src=@destination.ImageUrl alt="" class="picture-added-travel">
+            <h3>From @destination.Origin to @destination.DestinationName</h3>
+            <span>Tickets #@destination.TicketsCount </span><span>@destination.DateAndTime</span>
+            <a href="/Tickets/Create?DestinationId=@destination.Id" class="addTickets">Add Tickets</a>
+            <a href="/Tickets/Reserve?destinationId=@destination.Id" class="bookTrip">Book</a>
+        </div>
+    }
+</section>

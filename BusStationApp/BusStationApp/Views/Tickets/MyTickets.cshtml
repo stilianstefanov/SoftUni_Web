@@ -1,0 +1,21 @@
+﻿@model IEnumerable< BusStationApp.ViewModels.TicketMyViewModel>
+
+<main>
+    <h3>My Tickets</h3>
+    @foreach (var ticket in Model)
+    {
+        <section class="purchased-ticket">
+            <div class="purchased-left">
+                <img src="@ticket.ImageUrl" alt="">
+            </div>
+            <div class="purchased-right">
+                <div>
+                    <h3>@ticket.Origin</h3><span>@ticket.DestinationName</span>
+                    <h4>@ticket.DateAndTime</h4>
+                </div>
+                <p>Ticket price: @ticket.Price euros</p>
+            </div>
+
+        </section>
+    }
+</main>

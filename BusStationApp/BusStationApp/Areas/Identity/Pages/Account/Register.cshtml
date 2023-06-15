@@ -1,0 +1,24 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Create your account:</h2>
+<form method="post">
+    <div class="label-holder textCol d-flex justify-content-center">
+        <label>Username:</label>
+        <input asp-for="@Model.Input.Email" type="text" placeholder="Username" id="username" name="Email" />
+    </div>
+    <div class="label-holder textCol d-flex justify-content-center">
+        <label>Password:</label>
+        <input asp-for="@Model.Input.Password" type="password" placeholder="Password" id="password" name="Password" />
+    </div>
+    <div class="label-holder textCol d-flex justify-content-center">
+        <label>Repeat Password:</label>
+        <input asp-for="@Model.Input.ConfirmPassword" type="password" placeholder="Repeat Password" id="confirmPassword" name="ConfirmPassword" />
+    </div>
+    <button type="submit" class="register" value="Register">Register</button>
+</form>
