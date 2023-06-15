@@ -69,4 +69,41 @@ public class PlayersController : Controller
 
         return RedirectToAction("Collection", "Players");
     }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        try
+        {
+            var playerEditViewModel = await this._playersService.GetPlayerForEditAsync(id);
+
+            return View(playerEditViewModel);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("All", "Players");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(PlayerEditViewModel playerEditViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(playerEditViewModel);
+        }
+
+        try
+        {
+            await this._playersService.EditAsync(playerEditViewModel);
+        }
+        catch (Exception)
+        {
+            ModelState.AddModelError(string.Empty, "Something went wrong.");
+
+            return View(playerEditViewModel);
+        }
+        
+
+        return RedirectToAction("All", "Players");
+    }
 }

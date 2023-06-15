@@ -106,4 +106,39 @@ public class PlayersService : IPlayersService
             await _dbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<PlayerEditViewModel> GetPlayerForEditAsync(int id)
+    {
+        PlayerEditViewModel? playerEditViewModel = await _dbContext
+            .Players
+            .Where(p => p.Id == id)
+            .Select(p => new PlayerEditViewModel()
+            {
+                Description = p.Description,
+                Endurance = p.Endurance,
+                FullName = p.FullName,
+                ImageUrl = p.ImageUrl,
+                Position = p.Position,
+                Speed = p.Speed
+            })
+            .FirstAsync();
+
+        return playerEditViewModel;
+    }
+
+    public async Task EditAsync(PlayerEditViewModel playerEditViewModel)
+    {
+        Player player = await _dbContext
+            .Players
+            .FirstAsync(p => p.Id == playerEditViewModel.Id);
+
+        player.Description = playerEditViewModel.Description;
+        player.Endurance = playerEditViewModel.Endurance;
+        player.FullName = playerEditViewModel.FullName;
+        player.ImageUrl = playerEditViewModel.ImageUrl;
+        player.Position = playerEditViewModel.Position;
+        player.Speed = playerEditViewModel.Speed;
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

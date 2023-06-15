@@ -9,4 +9,6 @@ public interface IPlayersService
     Task<IEnumerable<PlayerViewModel>> GetMyPlayersAsync(string userId);
     Task AddToCollectionAsync(int id, string userId);
     Task RemoveFromCollectionAsync(int id, string userId);
+    Task<PlayerEditViewModel> GetPlayerForEditAsync(int id);
+    Task EditAsync(PlayerEditViewModel playerEditViewModel);
 }
