@@ -1,2 +1,2 @@
 # SoftUni_Web
-Workshops, Exercises, Exam Projects
+Workshops, Exercises, Basic ASP.NET Core Exam Projects
