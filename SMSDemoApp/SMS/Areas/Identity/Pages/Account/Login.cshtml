@@ -1,0 +1,25 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<h1>@ViewData["Title"]</h1>
+<link rel="stylesheet" href="~/css/" type="text/css" />
+<h1 class="text-center">Login</h1>
+<form class="mx-auto half-width col-5" method="post">
+    <div class="top-border-line primary-separator"></div>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input asp-for="Input.Email" type="text" class="form-control" id="username" placeholder="Username..." name="Email">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input asp-for="Input.Password" type="password" class="form-control" id="password" placeholder="Password..." name="Password">
+    </div>
+    <div class="top-border-line primary-separator"></div>
+    <div class="button-holder d-flex justify-content-center">
+        <button type="submit" class="btn SMS-bg-color">Login</button>
+    </div>
+</form>
