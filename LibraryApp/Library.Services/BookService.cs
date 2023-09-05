@@ -123,7 +123,7 @@ public class BookService : IBookService
                 Title = b.Title,
                 Description = b.Description,
                 ImageUrl = b.ImageUrl,
-                Rating = b.Rating.ToString(),
+                Rating = b.Rating.ToString("F"),
                 CategoryId = b.CategoryId
             })
             .FirstAsync();
