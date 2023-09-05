@@ -8,9 +8,6 @@ public class ChatController : Controller
 {
     private static IList<KeyValuePair<string, string>> _messages = new List<KeyValuePair<string, string>>();
 
-    public ChatController()
-    {
-    }
 
     [HttpGet]
     public IActionResult Show()
