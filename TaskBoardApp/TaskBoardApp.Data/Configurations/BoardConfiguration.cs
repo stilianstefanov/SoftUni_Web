@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+
 using Models;
 
 internal class BoardConfiguration : IEntityTypeConfiguration<Board>

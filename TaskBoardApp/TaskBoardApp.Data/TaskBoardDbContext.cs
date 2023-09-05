@@ -1,10 +1,9 @@
-﻿using TaskBoardApp.Data.Configurations;
-
-namespace TaskBoardApp.Data;
+﻿namespace TaskBoardApp.Data;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Configurations;
 using Task = Models.Task;
 
 public class TaskBoardDbContext : IdentityDbContext
